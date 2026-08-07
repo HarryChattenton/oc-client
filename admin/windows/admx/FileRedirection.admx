@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<policyDefinitions xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   revision="1.0" schemaVersion="1.0">
+  <policyNamespaces>
+    <target prefix="ocfr" namespace="OwnCloud.Policies.FolderRedirection" />
+  </policyNamespaces>
+  <resources minRequiredRevision="1.0" />
+  <supportedOn>
+    <definitions>
+      <definition name="SUPPORTED_ocfr_Windows10" displayName="$(string.SupportedWindows10)" />
+    </definitions>
+  </supportedOn>
+  <categories>
+    <category name="OwnCloud" displayName="$(string.Cat_OwnCloud)" />
+    <category name="FolderRedirection" displayName="$(string.Cat_FolderRedirection)">
+      <parentCategory ref="OwnCloud" />
+    </category>
+  </categories>
