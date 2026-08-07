@@ -19,7 +19,18 @@
       Apply when sync finishes with warnings: When checked (default), redirection also runs after a sync that completed with warnings. When unchecked, redirection runs only after a fully successful sync.&#xA;&#xA;
       If this policy is Disabled or Not Configured, no redirection is performed.
     </string>
-
+      <string id="RedirectDesktop">Redirect Desktop</string>
+      <string id="RedirectDesktopHelp">Redirects the Desktop known folder.</string>
+      <string id="RedirectDocuments">Redirect Documents</string>
+      <string id="RedirectDocumentsHelp">Redirects the Documents known folder.</string>
+      <string id="RedirectPictures">Redirect Pictures</string>
+      <string id="RedirectPicturesHelp">Redirects the Pictures known folder.</string>
+      <string id="RedirectDownloads">Redirect Downloads</string>
+      <string id="RedirectDownloadsHelp">Redirects the Downloads known folder.</string>
+      <string id="RedirectMusic">Redirect Music</string>
+      <string id="RedirectMusicHelp">Redirects the Music known folder.</string>
+      <string id="RedirectVideos">Redirect Videos</string>
+      <string id="RedirectVideosHelp">Redirects the Videos known folder.</string>
     </stringTable>
     <presentationTable>
       <presentation id="EnableFolderRedirection">

@@ -44,5 +44,59 @@
         </boolean>
         </elements>
     </policy>
+
+    <policy name="RedirectDesktop" class="Machine"
+            displayName="$(string.RedirectDesktop)" explainText="$(string.RedirectDesktopHelp)"
+            key="SOFTWARE\Policies\ownCloud\ownCloud\FolderRedirection" valueName="Desktop">
+      <parentCategory ref="FolderRedirection" />
+      <supportedOn ref="SUPPORTED_ocfr_Windows10" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+
+    <policy name="RedirectDocuments" class="Machine"
+            displayName="$(string.RedirectDocuments)" explainText="$(string.RedirectDocumentsHelp)"
+            key="SOFTWARE\Policies\ownCloud\ownCloud\FolderRedirection" valueName="Documents">
+      <parentCategory ref="FolderRedirection" />
+      <supportedOn ref="SUPPORTED_ocfr_Windows10" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+
+    <policy name="RedirectPictures" class="Machine"
+            displayName="$(string.RedirectPictures)" explainText="$(string.RedirectPicturesHelp)"
+            key="SOFTWARE\Policies\ownCloud\ownCloud\FolderRedirection" valueName="Pictures">
+      <parentCategory ref="FolderRedirection" />
+      <supportedOn ref="SUPPORTED_ocfr_Windows10" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+
+    <policy name="RedirectDownloads" class="Machine"
+            displayName="$(string.RedirectDownloads)" explainText="$(string.RedirectDownloadsHelp)"
+            key="SOFTWARE\Policies\ownCloud\ownCloud\FolderRedirection" valueName="Downloads">
+      <parentCategory ref="FolderRedirection" />
+      <supportedOn ref="SUPPORTED_ocfr_Windows10" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+
+    <policy name="RedirectMusic" class="Machine"
+            displayName="$(string.RedirectMusic)" explainText="$(string.RedirectMusicHelp)"
+            key="SOFTWARE\Policies\ownCloud\ownCloud\FolderRedirection" valueName="Music">
+      <parentCategory ref="FolderRedirection" />
+      <supportedOn ref="SUPPORTED_ocfr_Windows10" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+
+    <policy name="RedirectVideos" class="Machine"
+            displayName="$(string.RedirectVideos)" explainText="$(string.RedirectVideosHelp)"
+            key="SOFTWARE\Policies\ownCloud\ownCloud\FolderRedirection" valueName="Videos">
+      <parentCategory ref="FolderRedirection" />
+      <supportedOn ref="SUPPORTED_ocfr_Windows10" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
   </policies>
 </policyDefinitions>
