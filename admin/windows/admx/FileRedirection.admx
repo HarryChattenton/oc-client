@@ -98,5 +98,29 @@
       <enabledValue><decimal value="1" /></enabledValue>
       <disabledValue><decimal value="0" /></disabledValue>
     </policy>
+    <policy name="RedirectFavorites" class="Machine"
+            displayName="$(string.RedirectFavorites)" explainText="$(string.RedirectFavoritesHelp)"
+            key="SOFTWARE\Policies\ownCloud\ownCloud\FolderRedirection" valueName="Favorites">
+      <parentCategory ref="FolderRedirection" />
+      <supportedOn ref="SUPPORTED_ocfr_Windows10" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+    <policy name="RedirectContacts" class="Machine"
+            displayName="$(string.RedirectContacts)" explainText="$(string.RedirectContactsHelp)"
+            key="SOFTWARE\Policies\ownCloud\ownCloud\FolderRedirection" valueName="Contacts">
+      <parentCategory ref="FolderRedirection" />
+      <supportedOn ref="SUPPORTED_ocfr_Windows10" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
+    <policy name="RedirectLinks" class="Machine"
+            displayName="$(string.RedirectLinks)" explainText="$(string.RedirectLinksHelp)"
+            key="SOFTWARE\Policies\ownCloud\ownCloud\FolderRedirection" valueName="Links">
+      <parentCategory ref="FolderRedirection" />
+      <supportedOn ref="SUPPORTED_ocfr_Windows10" />
+      <enabledValue><decimal value="1" /></enabledValue>
+      <disabledValue><decimal value="0" /></disabledValue>
+    </policy>
   </policies>
 </policyDefinitions>

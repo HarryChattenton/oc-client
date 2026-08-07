@@ -31,6 +31,12 @@
       <string id="RedirectMusicHelp">Redirects the Music known folder.</string>
       <string id="RedirectVideos">Redirect Videos</string>
       <string id="RedirectVideosHelp">Redirects the Videos known folder.</string>
+      <string id="RedirectFavorites">Redirect Favorites</string>
+      <string id="RedirectFavoritesHelp">Redirects the Favorites known folder.</string>
+      <string id="RedirectContacts">Redirect Contacts</string>
+      <string id="RedirectContactsHelp">Redirects the Contacts known folder.</string>
+      <string id="RedirectLinks">Redirect Links</string>
+      <string id="RedirectLinksHelp">Redirects the Links known folder.</string>
     </stringTable>
     <presentationTable>
       <presentation id="EnableFolderRedirection">
