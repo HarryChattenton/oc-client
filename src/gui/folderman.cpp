@@ -21,6 +21,7 @@
 #include "common/asserts.h"
 #include "configfile.h"
 #include "folder.h"
+#include "folderredirection.h"
 #include "foldermanagement/folderbuilder.h"
 #include "foldermanagement/foldermanagementutils.h"
 #include "gui/networkinformation.h"
@@ -691,8 +692,11 @@ void FolderMan::slotFolderSyncStarted()
  * Start the next sync after the system had some milliseconds to breath.
  * This delay is particularly useful to avoid late file change notifications
  * (that we caused ourselves by syncing) from triggering another spurious sync.
+ * 
+ * Runs folder redirection once sync completes as 'success' or 'problem' and 
+ * passes through the sync result to honour ApplyOnProblem if it is configured.
  */
-void FolderMan::slotFolderSyncFinished(const SyncResult &)
+void FolderMan::slotFolderSyncFinished(const SyncResult &result)
 {
     auto f = qobject_cast<Folder *>(sender());
     OC_ASSERT(f);
@@ -701,6 +705,10 @@ void FolderMan::slotFolderSyncFinished(const SyncResult &)
 
     qCInfo(lcFolderMan) << "<========== Sync finished for folder [" << f->shortGuiLocalPath() << "] of account ["
                         << f->accountState()->account()->displayNameWithHost() << "] with remote [" << f->remoteUrl().toDisplayString() << "]";
+
+    if (result.status() == SyncResult::Success || result.status() == SyncResult::Problem) {
+        FolderRedirection::applyOnSyncFinished(f, result.status() == SyncResult::Success);
+    }
 }
 
 // consider moving this to FolderBuilder so we can "make" tests use it someday

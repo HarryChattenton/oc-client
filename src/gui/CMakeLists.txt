@@ -21,6 +21,7 @@ set(client_SRCS
     connectionvalidator.cpp
     folder.cpp
     folderman.cpp
+    folderredirection.cpp
     folderwatcher.cpp
     ignorelisteditor.cpp
     lockwatcher.cpp
