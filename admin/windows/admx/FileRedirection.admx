@@ -12,8 +12,37 @@
     </definitions>
   </supportedOn>
   <categories>
-    <category name="OwnCloud" displayName="$(string.Cat_OwnCloud)" />
-    <category name="FolderRedirection" displayName="$(string.Cat_FolderRedirection)">
+    <category name="OwnCloud" displayName="$(string.OwnCloud)" />
+    <category name="FolderRedirection" displayName="$(string.FolderRedirection)">
       <parentCategory ref="OwnCloud" />
     </category>
   </categories>
+  <policies>
+    <policy name="EnableFolderRedirection" class="Machine"
+            displayName="$(string.EnableFolderRedirection)"
+            explainText="$(string.EnableFolderRedirectionHelp)"
+            key="SOFTWARE\Policies\ownCloud\ownCloud\FolderRedirection"
+            valueName="Enabled"
+            presentation="$(presentation.EnableFolderRedirection)">
+        <parentCategory ref="FolderRedirection" />
+        <supportedOn ref="SUPPORTED_ocfr_Windows10" />
+        <enabledValue><decimal value="1" /></enabledValue>
+        <disabledValue><decimal value="0" /></disabledValue>
+        <elements>
+        <text id="Subfolder" valueName="Subfolder" />
+        <boolean id="MigrateContent" valueName="MigrateContent">
+            <trueValue><decimal value="1" /></trueValue>
+            <falseValue><decimal value="0" /></falseValue>
+        </boolean>
+        <boolean id="CreateTargetIfMissing" valueName="CreateTargetIfMissing">
+            <trueValue><decimal value="1" /></trueValue>
+            <falseValue><decimal value="0" /></falseValue>
+        </boolean>
+        <boolean id="ApplyOnProblem" valueName="ApplyOnProblem">
+            <trueValue><decimal value="1" /></trueValue>
+            <falseValue><decimal value="0" /></falseValue>
+        </boolean>
+        </elements>
+    </policy>
+  </policies>
+</policyDefinitions>

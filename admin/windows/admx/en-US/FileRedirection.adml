@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<policyDefinitionResources xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+                           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                           revision="1.0" schemaVersion="1.0">
+  <displayName>ownCloud Folder Redirection</displayName>
+  <description>Group Policy settings for redirecting Windows known folders into the ownCloud Personal space.</description>
+  <resources>
+    <stringTable>
+      <string id="SupportedWindows10">At least Windows 10</string>
+      <string id="OwnCloud">ownCloud</string>
+      <string id="FolderRedirection">Folder Redirection</string>
+
+      <string id="EnableFolderRedirection">Enable ownCloud folder redirection</string>
+      <string id="EnableFolderRedirectionHelp">Enables ownCloud known folder redirection.&#xA;
+      Redirection is scoped to the user's Personal space. Known folders are repointed into sub-folders of the Personal space's local path.&#xA;
+      Subfolder (optional): A subfolder within the Personal space to place the redirected known folders in. If left empty, they are redirected directly to the Personal space root "%USERPROFILE%\ownCloud\Personal\Documents".&#xA;
+      Migrate existing content: When set, existing files in the old known-folder locations are moved into the target before redirection and the emptied old folder is removed. If any file cannot be moved the old folder is left intact and will reattempt on the next sync event.&#xA;
+      Create target if missing: When set, any missing target folders are created locally under the base path so the folders are populated automatically for new users.&#xA;
+      Apply when sync finishes with warnings: When checked (default), redirection also runs after a sync that completed with warnings. When unchecked, redirection runs only after a fully successful sync.&#xA;&#xA;
+      If this policy is Disabled or Not Configured, no redirection is performed.
+    </string>
+
+    </stringTable>
+    <presentationTable>
+      <presentation id="EnableFolderRedirection">
+        <textBox refId="Subfolder">
+          <label>Subfolder (optional)</label>
+        </textBox>
+        <checkBox refId="MigrateContent" defaultChecked="false">Migrate existing content into target before redirecting</checkBox>
+        <checkBox refId="CreateTargetIfMissing" defaultChecked="false">Create target folder if it does not exist</checkBox>
+        <checkBox refId="ApplyOnProblem" defaultChecked="true">Apply when sync finishes with warnings</checkBox>
+      </presentation>
+
+    </presentationTable>
+  </resources>
+</policyDefinitionResources>
