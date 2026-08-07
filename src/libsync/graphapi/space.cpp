@@ -109,6 +109,11 @@ uint32_t Space::sortPriority() const
     return 0;
 }
 
+bool Space::isPersonalSpace() const
+{
+    return _drive.getDriveType() == personalC;
+}
+
 bool Space::disabled() const
 {
     // this is how disabled spaces are represented in the graph API

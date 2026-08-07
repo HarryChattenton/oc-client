@@ -88,6 +88,8 @@ namespace GraphApi {
          */
         bool disabled() const;
 
+        bool isPersonalSpace() const;
+
         SpaceImage *image() const;
 
 
