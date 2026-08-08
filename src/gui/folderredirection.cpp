@@ -56,16 +56,32 @@ namespace OCC
         return path;
     }
 
-
-    void FolderRedirection::applyOnSyncFinished(Folder *triggeringFolder, bool syncSuccessful)
+    // Return true if current matches target.
+    bool isAlreadyRedirected(const QString &current, const QString &target)
     {
-        //Placeholder, no code yet.
+        return QDir::cleanPath(current).compare(QDir::cleanPath(target), Qt::CaseInsensitive) == 0;
+    }
+    
+    void FolderRedirection::applyOnSyncFinished(Folder *triggeringFolder, bool syncSuccessful)
+    {   
+        //Test code. 
+        const QString basePath = QStringLiteral("C:\\Users\\Harry.Chattenton\\ownCloud\\Personal\\"); //Hardcoding for test.
+        qCInfo(lcFolderRedirection) << "Base Path: " << basePath;
         
-        //Test code to see if folder paths are gettable. 
         for (const auto &folder : knownFolders)
         {
             const QString path = getCurrentFolderPath(folder.id);
             qCInfo(lcFolderRedirection) << folder.name << path;
+
+            const QString targetPath = basePath + folder.name;
+            qCInfo(lcFolderRedirection) << folder.name << "Target Path:" << targetPath;
+            if (isAlreadyRedirected(path, targetPath)) 
+            {
+                qCInfo(lcFolderRedirection) << folder.name << " is already redirected. Skipping.";
+                continue; // Already redirected. Don't attempt redirect.
+            }
+            qCInfo(lcFolderRedirection) << folder.name << " needs to be redirected.";
+            continue;
         }
     }
 
