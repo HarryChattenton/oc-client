@@ -103,7 +103,7 @@ namespace OCC
         //Note for future -- Do I want to define triggering folder as a path somewhere before this?
         //Probably? Could add a guard to check if the 'Personal' path exists.
         const QString basePath = targetSubFolder.isEmpty() ? QDir::cleanPath(triggeringFolder->path())
-                                    : (QDir::cleanPath(triggeringFolder->path()) + QLatin1Char('/') + targetSubFolder); //Triggering folder will always be ../ownCloud/Personal
+                                    : (QDir::cleanPath(triggeringFolder->path()) + '/' + targetSubFolder); //Triggering folder will always be ../ownCloud/Personal
         qCInfo(lcFolderRedirection) << "Base Path: " << basePath;
 
         for (const auto &folder : knownFolders)
@@ -117,13 +117,23 @@ namespace OCC
             const QString currentPath = QDir::cleanPath(getCurrentFolderPath(folder.id));
             qCInfo(lcFolderRedirection) << folder.name << "Current Location:" << currentPath;
 
-            const QString targetPath = (basePath + QLatin1Char('/') + folder.name);
+            const QString targetPath = QDir::cleanPath(basePath + '/' + folder.name);
             qCInfo(lcFolderRedirection) << folder.name << "Target Path:" << targetPath;
-
+      
             if (isAlreadyRedirected(currentPath, targetPath)) 
             {
                 qCInfo(lcFolderRedirection) << folder.name << "is already redirected. Skipping.";
                 continue; // Already redirected. Don't attempt redirect.
+            }
+            
+            //Add trailing '/' to stop partial matches. 
+            //e.g. currentFolder '/parent/child', targetFolder '/parent/children'
+            //Without trailing '/', target folder would show as a match.
+            const bool targetIsChildOfCurrent = QString(targetPath + '/').startsWith(currentPath + '/', Qt::CaseInsensitive); 
+            if (targetIsChildOfCurrent)
+            {
+                qCWarning(lcFolderRedirection) << folder.name << "Target path is a child of current path. Skipping." << targetPath;
+                continue;
             }
 
             if (!QFileInfo::exists(targetPath)) {
