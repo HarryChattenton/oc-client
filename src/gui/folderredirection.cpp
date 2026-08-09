@@ -59,27 +59,71 @@ namespace OCC
     // Return true if current matches target.
     bool isAlreadyRedirected(const QString &current, const QString &target)
     {
-        return QDir::cleanPath(current).compare(QDir::cleanPath(target), Qt::CaseInsensitive) == 0;
+        return current.compare(target, Qt::CaseInsensitive) == 0; //So I don't forget, QDir::cleanPath not required because I did it at declaration. Bad idea?
+    }
+
+    // This function protects against attempts to escape the base path.
+    bool isValidSubFolder(const QString &folder)
+    {
+        //Returns false if subfolder value is an absolute path.
+        if (QDir::isAbsolutePath(folder))
+        {
+            return false;
+        }
+
+        //Returns false if any section of the subfolder path contains '..'
+        const auto subfolderSegments = QDir::cleanPath(folder).split(QLatin1Char('/'), Qt::SkipEmptyParts);
+        return !subfolderSegments.contains(QStringLiteral(".."));
     }
     
     void FolderRedirection::applyOnSyncFinished(Folder *triggeringFolder, bool syncSuccessful)
-    {   
-        //Test code. 
-        const QString basePath = QStringLiteral("C:\\Users\\Harry.Chattenton\\ownCloud\\Personal\\"); //Hardcoding for test.
-        qCInfo(lcFolderRedirection) << "Base Path: " << basePath;
+    {
         
+        QSettings policy(policyKeyPath, QSettings::NativeFormat);
+        const int redirectionEnabled = policy.value(QStringLiteral("Enabled")).toInt();
+        
+        if (redirectionEnabled != 1) 
+        {
+            //Redirection is not enabled. Don't attempt.
+            qCInfo(lcFolderRedirection) << "Known Folder Redirection not enabled.";
+            return;
+        }
+        qCInfo(lcFolderRedirection) << "Known Folder Redirection Enabled.";
+
+        const QString targetSubFolder = policy.value(QStringLiteral("Subfolder")).toString();
+        if (!targetSubFolder.isEmpty() && !isValidSubFolder(targetSubFolder))
+        {
+            qCWarning(lcFolderRedirection) << targetSubFolder << "is an invalid subfolder. Skipping redirection.";
+            return;
+        }
+
+        //Test code.
+        //Note for future -- Do I want to define triggering folder as a path somewhere before this?
+        //Probably? Could add a guard to check if the 'Personal' path exists.
+        const QString basePath = targetSubFolder.isEmpty() ? QDir::cleanPath(triggeringFolder->path())
+                                    : (QDir::cleanPath(triggeringFolder->path()) + QLatin1Char('/') + targetSubFolder); //Triggering folder will always be ../ownCloud/Personal
+        qCInfo(lcFolderRedirection) << "Base Path: " << basePath;
+
         for (const auto &folder : knownFolders)
         {
-            const QString path = getCurrentFolderPath(folder.id);
-            qCInfo(lcFolderRedirection) << folder.name << path;
+            if (policy.value(folder.name).toInt() != 1)
+            {
+                qCInfo(lcFolderRedirection) << "Redirection not enabled for:" << folder.name;
+                continue;
+            }
 
-            const QString targetPath = basePath + folder.name;
+            const QString currentPath = QDir::cleanPath(getCurrentFolderPath(folder.id));
+            qCInfo(lcFolderRedirection) << folder.name << "Current Location:" << currentPath;
+
+            const QString targetPath = (basePath + QLatin1Char('/') + folder.name);
             qCInfo(lcFolderRedirection) << folder.name << "Target Path:" << targetPath;
-            if (isAlreadyRedirected(path, targetPath)) 
+
+            if (isAlreadyRedirected(currentPath, targetPath)) 
             {
                 qCInfo(lcFolderRedirection) << folder.name << " is already redirected. Skipping.";
                 continue; // Already redirected. Don't attempt redirect.
             }
+
             qCInfo(lcFolderRedirection) << folder.name << " needs to be redirected.";
             continue;
         }
