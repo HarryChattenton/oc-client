@@ -125,6 +125,7 @@ namespace OCC
                 qCInfo(lcFolderRedirection) << folder.name << "is already redirected. Skipping.";
                 continue; // Already redirected. Don't attempt redirect.
             }
+            qCInfo(lcFolderRedirection) << folder.name << " needs to be redirected.";
             
             //Add trailing '/' to stop partial matches. 
             //e.g. currentFolder '/parent/child', targetFolder '/parent/children'
@@ -148,7 +149,24 @@ namespace OCC
                 qCInfo(lcFolderRedirection) << folder.name << "Created target folder at:" << targetPath;
             }
 
-            qCInfo(lcFolderRedirection) << folder.name << " needs to be redirected.";
+            //Converts 'cleanPath' using forward slashesback to a windows path using backslashes.
+            const std::wstring convertedTargetPath = QDir::toNativeSeparators(targetPath).toStdWString();
+            
+            //Change the known folder path.
+            const HRESULT folderPathSet = SHSetKnownFolderPath(folder.id, 0, nullptr, convertedTargetPath.c_str());
+            if (SUCCEEDED(folderPathSet))
+            {
+                qCInfo(lcFolderRedirection) << folder.name << "known folder successfully changed to:" << convertedTargetPath;
+                /*
+                 * TO DO:
+                 * Handle migration of data in old location.
+                 * Handle deletions of old location folder.
+                */  
+            }
+            else
+            {
+                qCWarning(lcFolderRedirection) << folder.name << "failed to set known folder to:" << convertedTargetPath;
+            }
             continue;
         }
     }
