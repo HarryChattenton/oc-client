@@ -97,6 +97,8 @@ namespace OCC
             return;
         }
 
+        const bool createIfMissing = policy.value(QStringLiteral("CreateTargetIfMissing")).toInt() == 1;
+
         //Test code.
         //Note for future -- Do I want to define triggering folder as a path somewhere before this?
         //Probably? Could add a guard to check if the 'Personal' path exists.
@@ -120,8 +122,20 @@ namespace OCC
 
             if (isAlreadyRedirected(currentPath, targetPath)) 
             {
-                qCInfo(lcFolderRedirection) << folder.name << " is already redirected. Skipping.";
+                qCInfo(lcFolderRedirection) << folder.name << "is already redirected. Skipping.";
                 continue; // Already redirected. Don't attempt redirect.
+            }
+
+            if (!QFileInfo::exists(targetPath)) {
+                if (!createIfMissing) {
+                    qCInfo(lcFolderRedirection) << folder.name << "Target folder does not exist. Policy not configured to seed folders." << targetPath;
+                    continue;
+                }
+                if (!QDir().mkpath(targetPath)) {
+                    qCWarning(lcFolderRedirection) << folder.name << "failed to create target folder for:" << targetPath;
+                    continue;
+                }
+                qCInfo(lcFolderRedirection) << folder.name << "Created target folder at:" << targetPath;
             }
 
             qCInfo(lcFolderRedirection) << folder.name << " needs to be redirected.";
