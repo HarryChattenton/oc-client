@@ -75,6 +75,11 @@ namespace OCC
         const auto subfolderSegments = QDir::cleanPath(folder).split(QLatin1Char('/'), Qt::SkipEmptyParts);
         return !subfolderSegments.contains(QStringLiteral(".."));
     }
+
+    bool migrateContents()
+    {
+        return false; //Temp hardcode to false.
+    }
     
     void FolderRedirection::applyOnSyncFinished(Folder *triggeringFolder, bool syncSuccessful)
     {
@@ -119,6 +124,7 @@ namespace OCC
         }
 
         const bool createIfMissing = policy.value(QStringLiteral("CreateTargetIfMissing")).toInt() == 1;
+        const bool migrateExistingContent = policy.value(QStringLiteral("MigrateContent")).toInt() == 1;
 
         const QString basePath = targetSubFolder.isEmpty() ? QDir::cleanPath(triggeringPath)
                                     : (QDir::cleanPath(triggeringPath) + '/' + targetSubFolder); //Triggering folder will always be ../ownCloud/Personal
@@ -180,6 +186,16 @@ namespace OCC
                  * Handle migration of data in old location.
                  * Handle deletions of old location folder.
                 */  
+                const bool attemptMigration = migrateExistingContent && QFileInfo::exists(currentPath);
+            
+                if (migrateContents) //If contents are migrated successfully from currentPath to targetPath.
+                {
+                    //Try to delete the old path (currentPath).
+                }
+                else
+                {
+                    qCInfo(lcFolderRedirection) << folder.name << "Migration not required.";
+                }
             }
             else
             {
