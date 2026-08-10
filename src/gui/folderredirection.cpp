@@ -78,6 +78,27 @@ namespace OCC
     
     void FolderRedirection::applyOnSyncFinished(Folder *triggeringFolder, bool syncSuccessful)
     {
+        const QString triggeringPath = triggeringFolder ? triggeringFolder->path() : QString();
+
+        if (triggeringPath.isEmpty()) 
+        {
+            qCWarning(lcFolderRedirection) << "No triggering folder path; skipping.";
+            return;
+        }
+        //Check if this is a personal space.
+        GraphApi::Space *space = triggeringFolder->space();
+
+        if (!space) //Triggering folder is either not a space or couldn't be determined.
+        { 
+            qCWarning(lcFolderRedirection) << "Couldn't determine if triggering folder is the Personal space" << triggeringPath; 
+            return; 
+        } 
+
+        if (!space->isPersonalSpace()) //If the triggering folder is not the Personal Space.
+        {
+            qCInfo(lcFolderRedirection) << "Skipping Non-Personal space." << triggeringPath;
+            return;
+        }
         
         QSettings policy(policyKeyPath, QSettings::NativeFormat);
         const int redirectionEnabled = policy.value(QStringLiteral("Enabled")).toInt();
@@ -99,11 +120,8 @@ namespace OCC
 
         const bool createIfMissing = policy.value(QStringLiteral("CreateTargetIfMissing")).toInt() == 1;
 
-        //Test code.
-        //Note for future -- Do I want to define triggering folder as a path somewhere before this?
-        //Probably? Could add a guard to check if the 'Personal' path exists.
-        const QString basePath = targetSubFolder.isEmpty() ? QDir::cleanPath(triggeringFolder->path())
-                                    : (QDir::cleanPath(triggeringFolder->path()) + '/' + targetSubFolder); //Triggering folder will always be ../ownCloud/Personal
+        const QString basePath = targetSubFolder.isEmpty() ? QDir::cleanPath(triggeringPath)
+                                    : (QDir::cleanPath(triggeringPath) + '/' + targetSubFolder); //Triggering folder will always be ../ownCloud/Personal
         qCInfo(lcFolderRedirection) << "Base Path: " << basePath;
 
         for (const auto &folder : knownFolders)
